@@ -17,6 +17,8 @@ namespace DannyPieShop.Models
         public DbSet<Pie> Pies { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
+        
         //creating the database entry once model created 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
