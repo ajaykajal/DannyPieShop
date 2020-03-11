@@ -20,14 +20,38 @@ namespace DannyPieShop.Controllers
         }
 
 
-        public IActionResult List()
+        //public IActionResult List()
+        //{
+        //    PiesListViewModel piesListviewModels = new PiesListViewModel
+        //    {
+        //        Pies = _pieRepository.AllPies,
+        //        CurrentCategory = "Cheese Cakes"
+        //    };
+        //    return View(piesListviewModels);
+        //}
+
+        public ViewResult List(string category)
         {
-            PiesListViewModel piesListviewModels = new PiesListViewModel
+            IEnumerable<Pie> pies;
+            string currentCategory;
+
+            if (string.IsNullOrEmpty(category))
             {
-                Pies = _pieRepository.AllPies,
-                CurrentCategory = "Cheese Cakes"
-            };
-            return View(piesListviewModels);
+                pies = _pieRepository.AllPies.OrderBy(p => p.PieId);
+                currentCategory = "All pies";
+            }
+            else
+            {
+                pies = _pieRepository.AllPies.Where(p => p.Category.CategoryName == category)
+                    .OrderBy(p => p.PieId);
+                currentCategory = _categoryRepository.AllCategories.FirstOrDefault(c => c.CategoryName == category)?.CategoryName;
+            }
+
+            return View(new PiesListViewModel
+            {
+                Pies = pies,
+                CurrentCategory = currentCategory
+            });
         }
 
         /// <summary>
